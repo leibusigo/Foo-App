@@ -1,15 +1,26 @@
 # coding=utf-8
+import db
 from flask import Flask
+from flask import request
+from flask import redirect
 from controllers.basic import basic_api
 
 app = Flask(__name__)
 # 基本功能路由
-app.register_blueprint(basic_api, url_prefix='/basic')
+app.register_blueprint(basic_api, url_prefix='/api/py27/basic')
+
+white_list = ['/api/py27/basic/connect']
 
 
 # 请求拦截
-# @app.before_request
-# def before():
+@app.before_request
+def before():
+    ip = db.session.find_one()
+    print ip
+    if ip is not None:
+        request.ip = ip['ip']
+    elif request.path not in white_list:
+        return redirect('/')
 
 
 # 响应拦截

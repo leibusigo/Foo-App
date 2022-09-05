@@ -9,6 +9,7 @@ class JsonResp(object):
         if len(data):
             self.data = data[0]
 
+
     def res(self):
         return dict(data=self.data, code=self.code)
 

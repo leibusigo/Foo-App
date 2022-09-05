@@ -7,6 +7,7 @@ from services import basic
 basic_api = Blueprint('basic_api', __name__)
 
 
+# 连接机器人接口
 @basic_api.route("/connect")
 def connect():
     robot_ip = request.args['ip']
@@ -14,15 +15,24 @@ def connect():
     if data is 'success':
         return stats.JsonResp(0, data).res()
     else:
+        return stats.err[data], 403
+
+
+# 唤醒机器人接口
+@basic_api.route("/wake")
+def wake():
+    data = basic.robot_wake()
+    if data is 'success':
+        return stats.JsonResp(0, data).res()
+    else:
         return stats.err[data], 404
 
 
-@basic_api.route("/wake")
-def wake():
-    # 异常处理
-    try:
-        # raise RuntimeError("自定义异常")
-        return stats.JsonResp(0, 'path').res()
-    except RuntimeError as e:
-        print(stats.err['ErrTest'])
-        return stats.err['ErrTest'], 404
+# 获取nao机器人信息
+@basic_api.route("/info")
+def info():
+    data = basic.robot_info()
+    if data is 'ErrFailToConnect':
+        return stats.err[data], 404
+    else:
+        return stats.JsonResp(0, data).res()
