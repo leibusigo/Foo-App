@@ -37,8 +37,24 @@ def robot_info():
     ip = request.ip
     if ip is not 1:
         battery_proxy = nao_proxy(ip)['battery_proxy']
+        # 这里还没测试
+        connect_proxy = nao_proxy(ip)['connect_proxy']
         battery = battery_proxy.getBatteryCharge()
+        status = connect_proxy.state()
 
+        print status
         return dict(battery=battery)
+    else:
+        return 'ErrIpNotFound'
+
+
+# nao机器人说话
+def robot_speak(value):
+    ip = request.ip
+    if ip is not 1:
+        speech_proxy = nao_proxy(ip)['speech_proxy']
+        speech_proxy.say(value)
+
+        return 'success'
     else:
         return 'ErrIpNotFound'

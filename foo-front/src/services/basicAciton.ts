@@ -9,3 +9,10 @@ export async function connect(ip: string) {
 
   return data
 }
+
+// 说话
+export async function speak(value: string) {
+  const { data } = await request.post<ApiResp>('/py27/basic/speak', { value })
+
+  return data
+}

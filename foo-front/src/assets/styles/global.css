@@ -1,5 +1,7 @@
 :root {
   --primary-color--: #ff5722;
+  --primary-border-color--: #ededed;
+  --adm-color-primary: var(--primary-color--);
 }
 
 * {

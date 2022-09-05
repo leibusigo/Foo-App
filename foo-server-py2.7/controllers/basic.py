@@ -36,3 +36,14 @@ def info():
         return stats.err[data], 404
     else:
         return stats.JsonResp(0, data).res()
+
+
+# 机器人说话
+@basic_api.route("/speak", methods=['POST'])
+def speak():
+    value = request.json['value']
+    data = basic.robot_speak(value)
+    if data is 'success':
+        return stats.JsonResp(0, data).res()
+    else:
+        return stats.err[data], 404

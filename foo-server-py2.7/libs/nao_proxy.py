@@ -12,13 +12,15 @@ def nao_proxy(ip):
         camera_proxy = ALProxy("ALVideoDevice", str(ip), port)
         speech_proxy = ALProxy("ALTextToSpeech", str(ip), port)
         battery_proxy = ALProxy("ALBattery",str(ip),port)
+        connect_proxy = ALProxy("ALConnectionManager", str(ip), port)
 
         return dict(
             motion_proxy=motion_proxy,
             posture_proxy=posture_proxy,
             camera_proxy=camera_proxy,
             speech_proxy=speech_proxy,
-            battery_proxy=battery_proxy
+            battery_proxy=battery_proxy,
+            connect_proxy=connect_proxy
         )
     except RuntimeError as e:
         # 连接失败异常

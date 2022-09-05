@@ -33,9 +33,23 @@ export default function useBasic() {
     [navigate]
   )
 
+  const speak = useCallback(async (value: string) => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      await basicServices.speak(value)
+    } catch (error: any) {
+      Toast.show(error.message)
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [])
+
   return {
     basicError,
     basicLoaded,
     connect,
+    speak,
   }
 }
