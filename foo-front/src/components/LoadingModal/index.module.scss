@@ -1,0 +1,27 @@
+.modal_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .loading_animation {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .loading_word {
+    padding-bottom: 0.4rem;
+  }
+
+  .stop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 0.4rem;
+
+    .stop_button {
+      width: 80%;
+    }
+  }
+}

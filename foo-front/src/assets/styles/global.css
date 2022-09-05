@@ -1,0 +1,22 @@
+:root {
+  --primary-color--: #ff5722;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  word-wrap: break-word;
+}
+
+/* 设定1 rem等于 100px，即根元素字体大小为100px */
+/* 根据页面宽度750px时字体大小(750 / 100 = 7.5)自适应 */
+html {
+  font-size: calc((100vw / 7.5));
+}
+
+body {
+  overflow: hidden;
+}

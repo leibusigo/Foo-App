@@ -20,7 +20,7 @@ def before():
     if ip is not None:
         request.ip = ip['ip']
     elif request.path not in white_list:
-        return redirect('/')
+        return redirect('/login')
 
 
 # 响应拦截

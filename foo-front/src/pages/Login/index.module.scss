@@ -1,0 +1,55 @@
+@mixin flex_center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.content {
+  height: 100vh;
+  width: 100vw;
+}
+
+.main {
+  padding-top: 10vh;
+
+  .logo {
+    @include flex_center();
+
+    .logo_icon {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .title_gird {
+    @include flex_center();
+
+    .title {
+      color: var(--primary-color--);
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+
+  .slogan_gird {
+    @include flex_center();
+
+    .slogan {
+      font-size: 0.4rem;
+      font-weight: bold;
+    }
+  }
+
+  .form_gird {
+    padding: 10vh 0.8rem;
+
+    .form_footer {
+      padding-top: 0.5rem;
+
+      .submit {
+        background-color: var(--primary-color--);
+        color: #fff;
+      }
+    }
+  }
+}
