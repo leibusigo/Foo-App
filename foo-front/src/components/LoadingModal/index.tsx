@@ -8,12 +8,11 @@ interface Props {
   visible: boolean
   // 是否显示急停按钮
   stopButton?: boolean
-  onToggleVisible: () => void
   // 急停事件
   onStop?: () => void
 }
 
-export default function LoadingModal({ visible, onToggleVisible }: Props) {
+export default function LoadingModal({ visible, stopButton, onStop }: Props) {
   return (
     <>
       <Modal
@@ -29,16 +28,18 @@ export default function LoadingModal({ visible, onToggleVisible }: Props) {
               <span>代码执行中</span>
               <DotLoading />
             </div>
-            <div className={styles.stop}>
-              <Button
-                className={styles.stop_button}
-                block
-                onClick={onToggleVisible}
-                color="danger"
-              >
-                终止运行
-              </Button>
-            </div>
+            {stopButton && (
+              <div className={styles.stop}>
+                <Button
+                  className={styles.stop_button}
+                  block
+                  onClick={onStop}
+                  color="danger"
+                >
+                  终止运行
+                </Button>
+              </div>
+            )}
           </div>
         }
       />

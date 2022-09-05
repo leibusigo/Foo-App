@@ -16,7 +16,7 @@ white_list = ['/api/py27/basic/connect']
 @app.before_request
 def before():
     ip = db.session.find_one()
-    print ip
+    request.ip = 1
     if ip is not None:
         request.ip = ip['ip']
     elif request.path not in white_list:

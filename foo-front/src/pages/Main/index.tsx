@@ -15,7 +15,8 @@ export default function Main() {
       <>
         <LoadingModal
           visible={loadingVisible}
-          onToggleVisible={() => {
+          stopButton
+          onStop={() => {
             setModalVisible(false)
           }}
         />

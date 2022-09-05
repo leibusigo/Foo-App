@@ -1,30 +1,26 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, Form, Grid, Input } from 'antd-mobile'
 
 import styles from './index.module.scss'
 import { ReactComponent as LogoIcon } from '../../assets/images/LogoIcon.svg'
 import LoadingModal from '../../components/LoadingModal'
+import useBasic from '../../hooks/useBasic'
 
 export default function Login() {
   // 控制加载modal显示
   const [loadingVisible, setModalVisible] = useState(false)
 
-  const loadingModal = useMemo(() => {
-    return (
-      <>
-        <LoadingModal
-          visible={loadingVisible}
-          onToggleVisible={() => {
-            setModalVisible(false)
-          }}
-        />
-      </>
-    )
-  }, [loadingVisible])
+  const { basicLoaded, connect } = useBasic()
+
+  useEffect(() => {
+    if (basicLoaded) {
+      setModalVisible(false)
+    }
+  }, [basicLoaded])
 
   return (
     <div className={styles.content}>
-      {loadingModal}
+      <LoadingModal visible={loadingVisible} />
       <Grid columns={1} gap={10} className={styles.main}>
         <Grid.Item className={styles.logo}>
           <LogoIcon className={styles.logo_icon} />
@@ -40,14 +36,12 @@ export default function Login() {
             name="form"
             layout="horizontal"
             onFinish={vals => {
-              // console.log(vals.ip)
+              connect(vals.ip)
+              setModalVisible(true)
             }}
             footer={
               <div className={styles.form_footer}>
                 <Button
-                  onClick={() => {
-                    setModalVisible(true)
-                  }}
                   className={styles.submit}
                   block
                   type="submit"
