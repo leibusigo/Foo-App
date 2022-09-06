@@ -10,6 +10,13 @@ export async function connect(ip: string) {
   return data
 }
 
+// 建立连接
+export async function info() {
+  const { data } = await request.get<ApiResp>('/py27/basic/info')
+
+  return data
+}
+
 // 说话
 export async function speak(value: string) {
   const { data } = await request.post<ApiResp>('/py27/basic/speak', { value })

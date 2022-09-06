@@ -1,15 +1,19 @@
 import { Toast } from 'antd-mobile'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import * as basicServices from '../services/basicAciton'
+import { context } from './store'
 
 export default function useBasic() {
   // 异常
   const [basicError, setBasicError] = useState('')
   // 加载
   const [basicLoaded, setBasicLoaded] = useState(false)
+  const [first, setFrist] = useState(false)
+  const { setRobotInfo } = useContext(context)
   const navigate = useNavigate()
 
+  // 连接
   const connect = useCallback(
     async (ip: string) => {
       try {
@@ -33,6 +37,27 @@ export default function useBasic() {
     [navigate]
   )
 
+  // 连接
+  const info = useCallback(async () => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      const { code, data } = await basicServices.info()
+      if (code === 0) {
+        setRobotInfo(data)
+      }
+    } catch (error: any) {
+      if (error.request.status === 500) {
+        Toast.show('ip地址错误或网络异常，请重新连接')
+      }
+
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [setRobotInfo])
+
+  // 说话
   const speak = useCallback(async (value: string) => {
     try {
       setBasicError('')
@@ -45,6 +70,13 @@ export default function useBasic() {
       setBasicLoaded(true)
     }
   }, [])
+
+  useEffect(() => {
+    if (!first) {
+      setFrist(true)
+      info()
+    }
+  }, [first, info])
 
   return {
     basicError,

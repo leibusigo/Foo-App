@@ -3,3 +3,8 @@ export interface ApiResp<T = any> {
   message: string
   data: T
 }
+
+export interface IRobotInfo {
+  battery: string
+  status: string
+}

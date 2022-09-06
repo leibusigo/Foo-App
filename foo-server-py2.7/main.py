@@ -2,7 +2,7 @@
 import db
 from flask import Flask
 from flask import request
-from flask import redirect
+from libs import stats
 from controllers.basic import basic_api
 
 app = Flask(__name__)
@@ -20,7 +20,7 @@ def before():
     if ip is not None:
         request.ip = ip['ip']
     elif request.path not in white_list:
-        return redirect('/login')
+        return stats.err['ErrSessionNotFound']
 
 
 # 响应拦截

@@ -9,3 +9,5 @@
 前端：语言：ts + scss；框架： react + antd-mobile
 
 后端：语言：python 2.7 + python3.6 ；框架：pytorch + flask + mongodb
+
+数据库：mongodb

@@ -42,8 +42,7 @@ def robot_info():
         battery = battery_proxy.getBatteryCharge()
         status = connect_proxy.state()
 
-        print status
-        return dict(battery=battery)
+        return dict(battery=battery, status=status)
     else:
         return 'ErrIpNotFound'
 
@@ -53,7 +52,8 @@ def robot_speak(value):
     ip = request.ip
     if ip is not 1:
         speech_proxy = nao_proxy(ip)['speech_proxy']
-        speech_proxy.say(value)
+        # 将ascii编码换位utf-8
+        speech_proxy.say(value.encode('utf8'))
 
         return 'success'
     else:

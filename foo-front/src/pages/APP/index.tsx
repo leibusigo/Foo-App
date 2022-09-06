@@ -1,20 +1,19 @@
-// import { useState } from 'react'
+import { useState } from 'react'
 import { useRoutes } from 'react-router-dom'
 
 // 导入路由表
-// import { StoreProvider } from '../../hooks/store'
+import { StoreProvider } from '../../hooks/store'
 import routerConfig from '../../routers'
+import { IRobotInfo } from '../../types/models'
 
 export default function App() {
   const element = useRoutes(routerConfig)
+  const [robotInfo, setRobotInfo] = useState<IRobotInfo>({
+    battery: '',
+    status: '',
+  })
 
   return (
-    // <StoreProvider
-    //   value={{
-
-    //   }}
-    // >
-    <>{element}</>
-    // </StoreProvider>
+    <StoreProvider value={{ robotInfo, setRobotInfo }}>{element}</StoreProvider>
   )
 }

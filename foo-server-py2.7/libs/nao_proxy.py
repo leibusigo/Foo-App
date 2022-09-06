@@ -22,7 +22,7 @@ def nao_proxy(ip):
             battery_proxy=battery_proxy,
             connect_proxy=connect_proxy
         )
-    except RuntimeError as e:
+    except Exception  as e:
         # 连接失败异常
         print ("nao机器人错误log：", e)
 

@@ -5,13 +5,15 @@ import styles from './index.module.scss'
 import { ReactComponent as LogoIcon } from '../../assets/images/LogoIcon.svg'
 import { ReactComponent as ChargeIcon } from '../../assets/images/ChargeIcon.svg'
 import { ReactComponent as SuccessIcon } from '../../assets/images/SuccessIcon.svg'
-// import { ReactComponent as ErrorIcon } from '../../assets/images/ErrorIcon.svg'
 import { ReactComponent as ControLlcon } from '../../assets/images/ControLlcon.svg'
 import { ReactComponent as AIcon } from '../../assets/images/AIcon.svg'
+import { context } from '../../hooks/store'
+import { useContext } from 'react'
 
 export default function Main() {
   const navigate = useNavigate()
   const location = useLocation()
+  const { robotInfo } = useContext(context)
 
   return (
     <main className={styles.main}>
@@ -20,7 +22,7 @@ export default function Main() {
         left={
           <div className={styles.nav_left}>
             <ChargeIcon style={{ width: '0.4rem', height: '0.4rem' }} />
-            <span className={styles.charge}>20%</span>
+            <span className={styles.charge}>{robotInfo.battery}%</span>
           </div>
         }
         right={

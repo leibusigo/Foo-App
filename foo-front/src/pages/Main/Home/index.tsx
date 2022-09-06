@@ -8,7 +8,7 @@ import useBasic from '../../../hooks/useBasic'
 
 export default function Home() {
   const swiperRef = useRef<SwiperRef>(null)
-  const [activeIndex, setActiveIndex] = useState(1)
+  const [activeIndex, setActiveIndex] = useState(0)
   const [speakValue, setSpeakValue] = useState('')
   // 控制加载modal显示
   const [loadingVisible, setModalVisible] = useState(false)
