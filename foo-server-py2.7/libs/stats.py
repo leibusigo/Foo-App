@@ -28,5 +28,6 @@ err = dict(
     ErrFailToConnect=ErrorStat(20001, '机器人连接失败').res(),
     ErrAlreadyConnect=ErrorStat(20002, '机器人已经连接').res(),
     ErrIpNotFound=ErrorStat(20003, 'ip未找到').res(),
+    ErrParametersNotAllowed=ErrorStat(20004,'参数不符合要求').res(),
     ErrSessionNotFound=ErrorStat(40001, '会话不存在').res()
 )

@@ -1,4 +1,6 @@
 # coding=utf-8
+import math
+
 from flask import Blueprint
 from flask import request
 from libs import stats
@@ -53,6 +55,20 @@ def info():
 def speak():
     value = request.json['value']
     data = basic.robot_speak(value)
+    if data is 'success':
+        return stats.JsonResp(0, data).res()
+    else:
+        return stats.err[data], 404
+
+
+# 机器人行走
+@basic_api.route("/walk", methods=['POST'])
+def walk():
+    distance = request.json['distance']
+    angle = request.json['angle']
+    if float(distance) < 0 or float(angle) < -math.pi or float(angle) > math.pi:
+        return stats.err['ErrParametersNotAllowed']
+    data = basic.robot_walk(distance, angle)
     if data is 'success':
         return stats.JsonResp(0, data).res()
     else:

@@ -24,6 +24,16 @@ export async function speak(value: string) {
   return data
 }
 
+// 行走
+export async function walk(distance: string, angle: string) {
+  const { data } = await request.post<ApiResp>('/py27/basic/walk', {
+    distance,
+    angle,
+  })
+
+  return data
+}
+
 // 唤醒
 export async function wake() {
   const { data } = await request.get<ApiResp>('/py27/basic/wake')

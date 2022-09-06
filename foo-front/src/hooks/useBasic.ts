@@ -78,6 +78,29 @@ export default function useBasic() {
     }
   }, [])
 
+  // 行走
+  const walk = useCallback(async (distance: string, angle: string) => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      if (
+        parseFloat(distance) < 0 ||
+        distance.trim() === '' ||
+        parseFloat(angle) < -Math.PI ||
+        parseFloat(angle) > Math.PI
+      ) {
+        Toast.show('参数不能为空，距离不能小于0，角度必须在-1派到1派之间')
+      } else {
+        await basicServices.walk(distance, angle)
+      }
+    } catch (error: any) {
+      Toast.show(error.message)
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [])
+
   // 唤醒
   const wake = useCallback(async () => {
     try {
@@ -120,5 +143,6 @@ export default function useBasic() {
     speak,
     wake,
     stop,
+    walk,
   }
 }

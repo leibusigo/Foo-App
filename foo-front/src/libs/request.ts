@@ -22,9 +22,9 @@ instance.interceptors.response.use(
     return res
   },
   err => {
-    // if (whiteList.indexOf(window.location.pathname) === -1) {
-    //   window.location.href = '/notFound'
-    // }
+    if (whiteList.indexOf(window.location.pathname) === -1) {
+      window.location.href = '/notFound'
+    }
 
     return Promise.reject(err)
   }

@@ -69,3 +69,16 @@ def robot_speak(value):
         return 'success'
     else:
         return 'ErrIpNotFound'
+
+
+# nao机器人行走
+def robot_walk(distance, angle):
+    ip = request.ip
+    if ip is not 1:
+        motion_proxy = nao_proxy(ip)['motion_proxy']
+        motion_proxy.moveTo(0, 0, float(angle))
+        motion_proxy.moveTo(float(distance), 0, 0)
+
+        return 'success'
+    else:
+        return 'ErrIpNotFound'

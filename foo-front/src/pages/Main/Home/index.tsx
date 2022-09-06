@@ -16,21 +16,34 @@ export default function Home() {
   // 控制加载modal显示
   const [loadingVisible, setModalVisible] = useState(false)
   // 控制加载按钮显示
-  const [buttonVisible, setButtonVisible] = useState(false)
+  const [buttonVisible, setButtonVisible] = useState(true)
   // 控制设置输入框显示隐藏
   const [inputVisible, setInputVisible] = useState(false)
-  const { basicLoaded, speak, wake, stop } = useBasic()
+  const { basicLoaded, speak, wake, stop, walk } = useBasic()
   const { debounce } = useDebounce()
 
   // 提交说话
   const submitSpeak = useCallback(() => {
-    debounce(() => {
+    debounce(async () => {
       setButtonVisible(false)
       speak(speakValue)
       setModalVisible(true)
       setSpeakValue('')
     }, 1000)
   }, [debounce, speak, speakValue])
+
+  //
+  const walkAciton = useCallback(
+    (angle: string) => {
+      debounce(async () => {
+        setButtonVisible(true)
+        setModalVisible(true)
+        await wake()
+        await walk(walkValue, angle)
+      }, 1000)
+    },
+    [debounce, wake, walk, walkValue]
+  )
 
   const tabItems = useMemo(
     () => [
@@ -45,36 +58,68 @@ export default function Home() {
       {
         key: 'left-front',
         content: '左上前进',
-        onClick: () => {},
+        onClick: () => {
+          walkAciton(`${Math.PI / 4}`)
+        },
       },
-      { key: 'front', content: '正向前进', onClick: () => {} },
+      {
+        key: 'front',
+        content: '正向前进',
+        onClick: () => {
+          walkAciton('0')
+        },
+      },
       {
         key: 'right-front',
         content: '右上前进',
         style: 'right',
-        onClick: () => {},
+        onClick: () => {
+          walkAciton(`${-(Math.PI / 4)}`)
+        },
       },
-      { key: 'left', content: '左向前进', onClick: () => {} },
+      {
+        key: 'left',
+        content: '左向前进',
+        onClick: () => {
+          walkAciton(`${Math.PI / 2}`)
+        },
+      },
       {
         key: 'center',
         content: '行走遥控',
         onClick: () => {},
       },
-      { key: 'right', content: '右向前进', onClick: () => {} },
+      {
+        key: 'right',
+        content: '右向前进',
+        onClick: () => {
+          walkAciton(`${-(Math.PI / 2)}`)
+        },
+      },
       {
         key: 'left-back',
         content: '左下前进',
         style: 'left',
-        onClick: () => {},
+        onClick: () => {
+          walkAciton(`${(3 * Math.PI) / 4}`)
+        },
       },
-      { key: 'back', content: '反向前进', onClick: () => {} },
+      {
+        key: 'back',
+        content: '反向前进',
+        onClick: () => {
+          walkAciton(`${Math.PI}`)
+        },
+      },
       {
         key: 'right-back',
         content: '右下前进',
-        onClick: () => {},
+        onClick: () => {
+          walkAciton(`${-((3 * Math.PI) / 4)}`)
+        },
       },
     ],
-    []
+    [walkAciton]
   )
 
   const basicControl = useMemo(() => {
@@ -129,7 +174,10 @@ export default function Home() {
         visible={loadingVisible}
         stopButton={buttonVisible}
         onStop={() => {
-          setModalVisible(false)
+          debounce(() => {
+            stop()
+            setModalVisible(false)
+          }, 1000)
         }}
       />
       <Tabs
@@ -174,14 +222,18 @@ export default function Home() {
                 <Input
                   value={walkValue}
                   onChange={val => {
-                    setWalkValue(val)
+                    if (val.trim() !== '' && isNaN(parseFloat(val))) {
+                      Toast.show('请输入数字')
+                    } else {
+                      setWalkValue(val)
+                    }
                   }}
                   onEnterPress={() => {
                     setInputVisible(false)
                   }}
                   autoFocus
                   placeholder="请输入"
-                ></Input>
+                />
               ) : (
                 <span>{walkValue}</span>
               )}
