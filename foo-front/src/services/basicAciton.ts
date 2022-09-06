@@ -23,3 +23,17 @@ export async function speak(value: string) {
 
   return data
 }
+
+// 唤醒
+export async function wake() {
+  const { data } = await request.get<ApiResp>('/py27/basic/wake')
+
+  return data
+}
+
+// 停止
+export async function stop() {
+  const { data } = await request.get<ApiResp>('/py27/basic/stop')
+
+  return data
+}

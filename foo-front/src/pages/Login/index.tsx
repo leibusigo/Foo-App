@@ -64,7 +64,7 @@ export default function Login() {
                 },
               ]}
             >
-              <Input placeholder="请输入ip地址" />
+              <Input autoFocus placeholder="请输入ip地址" />
             </Form.Item>
           </Form>
         </Grid.Item>

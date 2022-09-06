@@ -25,8 +25,15 @@ export default function useBasic() {
           Toast.show('连接成功')
         }
       } catch (error: any) {
-        if (error.request.status === 500) {
-          Toast.show('ip地址错误或网络异常，请重新连接')
+        switch (error.request.status) {
+          case 500:
+            Toast.show('ip地址错误或网络异常，请重新连接')
+            break
+          case 504:
+            Toast.show('服务器异常，请检查是否开启服务器')
+            break
+          default:
+            break
         }
 
         setBasicError(error.message)
@@ -71,6 +78,34 @@ export default function useBasic() {
     }
   }, [])
 
+  // 唤醒
+  const wake = useCallback(async () => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      await basicServices.wake()
+    } catch (error: any) {
+      Toast.show(error.message)
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [])
+
+  // 停止
+  const stop = useCallback(async () => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      await basicServices.stop()
+    } catch (error: any) {
+      Toast.show(error.message)
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [])
+
   useEffect(() => {
     if (!first) {
       setFrist(true)
@@ -83,5 +118,7 @@ export default function useBasic() {
     basicLoaded,
     connect,
     speak,
+    wake,
+    stop,
   }
 }

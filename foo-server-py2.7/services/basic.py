@@ -25,7 +25,18 @@ def robot_wake():
     if ip is not 1:
         motion_proxy = nao_proxy(ip)['motion_proxy']
         motion_proxy.wakeUp()
-        motion_proxy.moveTo(1, 0, 0)
+
+        return 'success'
+    else:
+        return 'ErrIpNotFound'
+
+
+# nao机器人停止
+def robot_stop():
+    ip = request.ip
+    if ip is not 1:
+        motion_proxy = nao_proxy(ip)['motion_proxy']
+        motion_proxy.rest()
 
         return 'success'
     else:

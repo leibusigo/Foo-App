@@ -1,0 +1,11 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+
+  .notFound_animation {
+    margin: 10vh 0 5vh 0;
+    height: 50vh;
+  }
+}

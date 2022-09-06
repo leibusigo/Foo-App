@@ -28,6 +28,16 @@ def wake():
         return stats.err[data], 404
 
 
+# 停止机器人接口
+@basic_api.route("/stop")
+def stop():
+    data = basic.robot_stop()
+    if data is 'success':
+        return stats.JsonResp(0, data).res()
+    else:
+        return stats.err[data], 404
+
+
 # 获取nao机器人信息
 @basic_api.route("/info")
 def info():
