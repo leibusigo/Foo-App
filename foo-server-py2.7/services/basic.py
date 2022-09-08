@@ -3,7 +3,9 @@ import db
 import time
 from flask import request
 from libs.nao_proxy import nao_proxy
-
+import vision_definitions
+import numpy as np
+import cv2
 
 # 连接nao机器人
 def robot_connect(robot_ip):
@@ -78,6 +80,29 @@ def robot_walk(distance, angle):
         motion_proxy = nao_proxy(ip)['motion_proxy']
         motion_proxy.moveTo(0, 0, float(angle))
         motion_proxy.moveTo(float(distance), 0, 0)
+
+        return 'success'
+    else:
+        return 'ErrIpNotFound'
+
+
+# nao机器人摄像头
+def robot_camera():
+    ip = request.ip
+    if ip is not 1:
+        camera_proxy = nao_proxy(ip)['camera_proxy']
+        camera_proxy.setActiveCamera(0)
+        video_client = camera_proxy.subscribe("python_GVM", vision_definitions.kVGA,
+                                              vision_definitions.kBGRColorSpace,
+                                              20)
+        frame = camera_proxy.getImageRemote(video_client)
+        camera_proxy.unsubscribe(video_client)
+        frame_width = frame[0]
+        frame_height = frame[1]
+        frame_channels = frame[2]
+        frame_array = np.frombuffer(frame[6], dtype=np.uint8).reshape([frame_height, frame_width, frame_channels])
+        # 保存图片到此绝对路径
+        cv2.imwrite('../images/shot_cut.jpg', frame_array)
 
         return 'success'
     else:

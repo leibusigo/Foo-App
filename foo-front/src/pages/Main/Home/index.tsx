@@ -1,12 +1,12 @@
-import { Button, Grid, Input, Swiper, Tabs, Toast } from 'antd-mobile'
+import { Button, Grid, Input, Swiper, Tabs, Toast, Image } from 'antd-mobile'
 import { SwiperRef } from 'antd-mobile/es/components/swiper'
 import { useEffect, useMemo, useCallback, useRef, useState } from 'react'
+import classNames from 'classnames'
 
 import styles from './index.module.scss'
 import LoadingModal from '../../../components/LoadingModal'
 import useBasic from '../../../hooks/useBasic'
 import useDebounce from '../../../hooks/useDebounce'
-import classNames from 'classnames'
 
 export default function Home() {
   const swiperRef = useRef<SwiperRef>(null)
@@ -122,46 +122,6 @@ export default function Home() {
     [walkAciton]
   )
 
-  const basicControl = useMemo(() => {
-    return (
-      <>
-        <Grid.Item className={styles.content_grid_title} span={6}>
-          <span>切换Nao状态</span>
-        </Grid.Item>
-        <Grid.Item className={styles.content_grid_button} span={3}>
-          <Button
-            onClick={() => {
-              debounce(() => {
-                setButtonVisible(false)
-                wake()
-                setModalVisible(true)
-              }, 1000)
-            }}
-            block
-            color="primary"
-          >
-            唤醒
-          </Button>
-        </Grid.Item>
-        <Grid.Item className={styles.content_grid_button} span={3}>
-          <Button
-            onClick={() => {
-              debounce(() => {
-                setButtonVisible(false)
-                stop()
-                setModalVisible(true)
-              }, 1000)
-            }}
-            block
-            color="primary"
-          >
-            待机
-          </Button>
-        </Grid.Item>
-      </>
-    )
-  }, [debounce, stop, wake])
-
   useEffect(() => {
     if (basicLoaded) {
       setModalVisible(false)
@@ -204,7 +164,39 @@ export default function Home() {
       >
         <Swiper.Item>
           <Grid columns={6} className={styles.content}>
-            {basicControl}
+            <Grid.Item className={styles.content_grid_title} span={6}>
+              <span>切换Nao状态</span>
+            </Grid.Item>
+            <Grid.Item className={styles.content_grid_button} span={3}>
+              <Button
+                onClick={() => {
+                  debounce(() => {
+                    setButtonVisible(false)
+                    wake()
+                    setModalVisible(true)
+                  }, 1000)
+                }}
+                block
+                color="primary"
+              >
+                唤醒
+              </Button>
+            </Grid.Item>
+            <Grid.Item className={styles.content_grid_button} span={3}>
+              <Button
+                onClick={() => {
+                  debounce(() => {
+                    setButtonVisible(false)
+                    stop()
+                    setModalVisible(true)
+                  }, 1000)
+                }}
+                block
+                color="primary"
+              >
+                待机
+              </Button>
+            </Grid.Item>
             <Grid.Item className={styles.content_grid_title} span={6}>
               <span>Nao基本控制</span>
             </Grid.Item>
@@ -276,7 +268,15 @@ export default function Home() {
         </Swiper.Item>
         <Swiper.Item>
           <Grid columns={6} className={styles.content}>
-            {basicControl}
+            <Grid.Item
+              className={classNames(styles.set_grid, styles.set_value)}
+              span={6}
+            >
+              <Image
+                src={require('../../../assets/img/video.jpg') || ''}
+                fit="fill"
+              />
+            </Grid.Item>
           </Grid>
         </Swiper.Item>
       </Swiper>

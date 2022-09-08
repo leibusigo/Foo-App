@@ -73,3 +73,13 @@ def walk():
         return stats.JsonResp(0, data).res()
     else:
         return stats.err[data], 404
+
+
+# 机器人摄像头
+@basic_api.route("/camera")
+def camera():
+    data = basic.robot_camera()
+    if data is 'success':
+        return stats.JsonResp(0, data).res()
+    else:
+        return stats.err[data], 404
