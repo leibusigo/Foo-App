@@ -78,7 +78,8 @@ def walk():
 # 机器人摄像头
 @basic_api.route("/camera")
 def camera():
-    data = basic.robot_camera()
+    camera_id = int(request.args['id'])
+    data = basic.robot_camera(camera_id)
     if data is 'success':
         return stats.JsonResp(0, data).res()
     else:

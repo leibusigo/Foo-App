@@ -1,25 +1,44 @@
-import { Button, Grid, Input, Swiper, Tabs, Toast, Image } from 'antd-mobile'
+import {
+  Button,
+  Grid,
+  Input,
+  Swiper,
+  Tabs,
+  Toast,
+  Image,
+  Selector,
+} from 'antd-mobile'
 import { SwiperRef } from 'antd-mobile/es/components/swiper'
-import { useEffect, useMemo, useCallback, useRef, useState } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useCallback,
+  useRef,
+  useState,
+  useContext,
+} from 'react'
 import classNames from 'classnames'
 
 import styles from './index.module.scss'
 import LoadingModal from '../../../components/LoadingModal'
 import useBasic from '../../../hooks/useBasic'
 import useDebounce from '../../../hooks/useDebounce'
+import { context } from '../../../hooks/store'
 
 export default function Home() {
   const swiperRef = useRef<SwiperRef>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const [speakValue, setSpeakValue] = useState('')
   const [walkValue, setWalkValue] = useState('0.1')
+  const [cameraId, setCameraId] = useState<string[]>(['0'])
+  const { imageVisible, setImageVisible } = useContext(context)
   // 控制加载modal显示
   const [loadingVisible, setModalVisible] = useState(false)
   // 控制加载按钮显示
   const [buttonVisible, setButtonVisible] = useState(true)
   // 控制设置输入框显示隐藏
   const [inputVisible, setInputVisible] = useState(false)
-  const { basicLoaded, speak, wake, stop, walk } = useBasic()
+  const { basicLoaded, speak, wake, stop, walk, camera } = useBasic()
   const { debounce } = useDebounce()
 
   // 提交说话
@@ -32,7 +51,7 @@ export default function Home() {
     }, 1000)
   }, [debounce, speak, speakValue])
 
-  //
+  // 行走动作
   const walkAciton = useCallback(
     (angle: string) => {
       debounce(async () => {
@@ -47,8 +66,22 @@ export default function Home() {
 
   const tabItems = useMemo(
     () => [
-      { key: 'func1', title: '控制方式一' },
-      { key: 'func2', title: '控制方式二' },
+      { key: 'func1', title: '控制模块一' },
+      { key: 'func2', title: '控制模块二' },
+    ],
+    []
+  )
+
+  const seletorOption = useMemo(
+    () => [
+      {
+        label: '摄像头一',
+        value: '0',
+      },
+      {
+        label: '摄像头二',
+        value: '1',
+      },
     ],
     []
   )
@@ -120,6 +153,11 @@ export default function Home() {
       },
     ],
     [walkAciton]
+  )
+
+  const imgUrl = useMemo(
+    () => (imageVisible ? '/img/shot_cut.jpg' : '/img/default.png'),
+    [imageVisible]
   )
 
   useEffect(() => {
@@ -198,7 +236,7 @@ export default function Home() {
               </Button>
             </Grid.Item>
             <Grid.Item className={styles.content_grid_title} span={6}>
-              <span>Nao基本控制</span>
+              <span>Nao行走控制</span>
             </Grid.Item>
             <Grid.Item
               className={classNames(styles.set_grid, styles.set_left)}
@@ -268,14 +306,36 @@ export default function Home() {
         </Swiper.Item>
         <Swiper.Item>
           <Grid columns={6} className={styles.content}>
-            <Grid.Item
-              className={classNames(styles.set_grid, styles.set_value)}
-              span={6}
-            >
-              <Image
-                src={require('../../../assets/img/video.jpg') || ''}
-                fit="fill"
+            <Grid.Item className={styles.content_grid_title} span={6}>
+              <span>Nao拍摄控制</span>
+            </Grid.Item>
+            <Grid.Item className={styles.image_grid} span={6}>
+              <Image src={require('../../../assets' + imgUrl)} fit="fill" />
+            </Grid.Item>
+            <Grid.Item span={6}>
+              <Selector
+                className={styles.single_seletor}
+                columns={2}
+                options={seletorOption}
+                defaultValue={cameraId}
+                onChange={value => {
+                  setCameraId(value)
+                }}
               />
+            </Grid.Item>
+            <Grid.Item span={6} className={styles.shot_button}>
+              <Button
+                onClick={async () => {
+                  setButtonVisible(false)
+                  setModalVisible(true)
+                  await camera(cameraId[0])
+                  setImageVisible(true)
+                }}
+                block
+                color="primary"
+              >
+                拍摄
+              </Button>
             </Grid.Item>
           </Grid>
         </Swiper.Item>

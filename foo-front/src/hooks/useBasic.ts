@@ -129,6 +129,20 @@ export default function useBasic() {
     }
   }, [])
 
+  // 摄像
+  const camera = useCallback(async (cameraId: string) => {
+    try {
+      setBasicError('')
+      setBasicLoaded(false)
+      await basicServices.camera(cameraId)
+    } catch (error: any) {
+      Toast.show(error.message)
+      setBasicError(error.message)
+    } finally {
+      setBasicLoaded(true)
+    }
+  }, [])
+
   useEffect(() => {
     if (!first) {
       setFrist(true)
@@ -144,5 +158,6 @@ export default function useBasic() {
     wake,
     stop,
     walk,
+    camera,
   }
 }

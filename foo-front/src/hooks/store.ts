@@ -6,6 +6,8 @@ interface IContext {
   // 机器人信息
   robotInfo: IRobotInfo
   setRobotInfo: (robotInfo: IRobotInfo) => void
+  imageVisible: boolean
+  setImageVisible: (imageVisible: boolean) => void
 }
 
 // 创建context对象
@@ -15,6 +17,8 @@ const context = createContext<IContext>({
     status: '',
   },
   setRobotInfo: () => {},
+  imageVisible: false,
+  setImageVisible: () => {},
 })
 
 // 创建生产者

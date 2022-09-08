@@ -87,11 +87,11 @@ def robot_walk(distance, angle):
 
 
 # nao机器人摄像头
-def robot_camera():
+def robot_camera(camera_id):
     ip = request.ip
     if ip is not 1:
         camera_proxy = nao_proxy(ip)['camera_proxy']
-        camera_proxy.setActiveCamera(0)
+        camera_proxy.setActiveCamera(camera_id)
         video_client = camera_proxy.subscribe("python_GVM", vision_definitions.kVGA,
                                               vision_definitions.kBGRColorSpace,
                                               20)
@@ -102,7 +102,9 @@ def robot_camera():
         frame_channels = frame[2]
         frame_array = np.frombuffer(frame[6], dtype=np.uint8).reshape([frame_height, frame_width, frame_channels])
         # 保存图片到此绝对路径
-        cv2.imwrite('../images/shot_cut.jpg', frame_array)
+        print frame_array
+        # 相对路径是相对于根目录
+        cv2.imwrite('../foo-front/src/assets/img/shot_cut.jpg', frame_array)
 
         return 'success'
     else:

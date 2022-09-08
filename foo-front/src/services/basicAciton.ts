@@ -10,7 +10,7 @@ export async function connect(ip: string) {
   return data
 }
 
-// 建立连接
+// 获取基本信息
 export async function info() {
   const { data } = await request.get<ApiResp>('/py27/basic/info')
 
@@ -44,6 +44,15 @@ export async function wake() {
 // 停止
 export async function stop() {
   const { data } = await request.get<ApiResp>('/py27/basic/stop')
+
+  return data
+}
+
+// 摄像
+export async function camera(cameraId: string) {
+  const { data } = await request.get<ApiResp>(
+    `/py27/basic/camera?${new URLSearchParams('id=' + cameraId)}`
+  )
 
   return data
 }

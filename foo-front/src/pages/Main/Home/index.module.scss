@@ -1,6 +1,6 @@
 .content {
   height: calc(100vh - 40.4px - 45px - 48px - 80px);
-  padding-bottom: 0.6rem;
+  // padding-bottom: 0.6rem;
   user-select: none;
   overflow: auto;
 
@@ -70,4 +70,20 @@
   .speak_button {
     width: 1.8rem;
   }
+}
+
+.image_grid {
+  padding: 0 0.4rem 0.4rem;
+}
+
+.single_seletor {
+  margin: 0 0.1rem;
+
+  :global(.adm-selector-item) {
+    margin: 0 0.2rem;
+  }
+}
+
+.shot_button {
+  margin: 0.4rem 0.3rem;
 }

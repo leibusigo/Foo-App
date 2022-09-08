@@ -12,8 +12,13 @@ export default function App() {
     battery: '',
     status: '',
   })
+  const [imageVisible, setImageVisible] = useState(false)
 
   return (
-    <StoreProvider value={{ robotInfo, setRobotInfo }}>{element}</StoreProvider>
+    <StoreProvider
+      value={{ robotInfo, setRobotInfo, imageVisible, setImageVisible }}
+    >
+      {element}
+    </StoreProvider>
   )
 }
