@@ -1,9 +1,8 @@
 # coding=utf-8
 import math
-
-from flask import Blueprint
-from flask import request
+from flask import Blueprint, request
 from libs import stats
+from libs.check import check
 from services import basic
 
 basic_api = Blueprint('basic_api', __name__)
@@ -14,30 +13,21 @@ basic_api = Blueprint('basic_api', __name__)
 def connect():
     robot_ip = request.args['ip']
     data = basic.robot_connect(robot_ip)
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 403
+    return check(data)
 
 
 # 唤醒机器人接口
 @basic_api.route("/wake")
 def wake():
     data = basic.robot_wake()
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 404
+    return check(data)
 
 
 # 停止机器人接口
 @basic_api.route("/stop")
 def stop():
     data = basic.robot_stop()
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 404
+    return check(data)
 
 
 # 获取nao机器人信息
@@ -55,10 +45,7 @@ def info():
 def speak():
     value = request.json['value']
     data = basic.robot_speak(value)
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 404
+    return check(data)
 
 
 # 机器人行走
@@ -69,10 +56,7 @@ def walk():
     if float(distance) < 0 or float(angle) < -math.pi or float(angle) > math.pi:
         return stats.err['ErrParametersNotAllowed']
     data = basic.robot_walk(distance, angle)
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 404
+    return check(data)
 
 
 # 机器人摄像头
@@ -80,7 +64,4 @@ def walk():
 def camera():
     camera_id = int(request.args['id'])
     data = basic.robot_camera(camera_id)
-    if data is 'success':
-        return stats.JsonResp(0, data).res()
-    else:
-        return stats.err[data], 404
+    return check(data)

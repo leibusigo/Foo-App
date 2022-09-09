@@ -1,11 +1,12 @@
 # coding=utf-8
+import os
 import db
 import time
 from flask import request
 from libs.nao_proxy import nao_proxy
-import vision_definitions
-import numpy as np
+from libs.image_process import take_picture
 import cv2
+
 
 # 连接nao机器人
 def robot_connect(robot_ip):
@@ -92,19 +93,9 @@ def robot_camera(camera_id):
     if ip is not 1:
         camera_proxy = nao_proxy(ip)['camera_proxy']
         camera_proxy.setActiveCamera(camera_id)
-        video_client = camera_proxy.subscribe("python_GVM", vision_definitions.kVGA,
-                                              vision_definitions.kBGRColorSpace,
-                                              20)
-        frame = camera_proxy.getImageRemote(video_client)
-        camera_proxy.unsubscribe(video_client)
-        frame_width = frame[0]
-        frame_height = frame[1]
-        frame_channels = frame[2]
-        frame_array = np.frombuffer(frame[6], dtype=np.uint8).reshape([frame_height, frame_width, frame_channels])
-        # 保存图片到此绝对路径
-        print frame_array
+        frame_array = take_picture(camera_proxy)
         # 相对路径是相对于根目录
-        cv2.imwrite('../foo-front/src/assets/img/shot_cut.jpg', frame_array)
+        cv2.imwrite(os.environ.get("IMG_SAVE_PATH", None) + '/shot_cut.jpg', frame_array)
 
         return 'success'
     else:
