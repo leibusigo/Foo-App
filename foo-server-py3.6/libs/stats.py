@@ -25,5 +25,5 @@ class ErrorStat(JsonResp):
 
 # 异常实例
 err = dict(
-
+    ErrFileNotFound=ErrorStat(20001, '文件不存在').res(),
 )

@@ -1,7 +1,5 @@
 # coding=utf-8
 import os
-import time
-
 import cv2
 from flask import request
 import db
@@ -25,6 +23,9 @@ def start_tracking(epoch):
             db.track.insert({"angle": '-1'})
         camera_proxy.setActiveCamera(0)
         frame_array = take_picture(camera_proxy)
+        if epoch != '1':
+            db.track.delete_many({})
+            db.track.insert({"angle": '-1'})
         base_url = os.environ.get("IMG_SAVE_PATH", None) + '/epoch' + str(epoch)
         ImageProcess(base_url).mkdir()
         cv2.imwrite(base_url + '/origin.jpg', frame_array)

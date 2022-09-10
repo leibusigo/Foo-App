@@ -1,4 +1,5 @@
 # coding=utf-8
+import json
 import os
 from flask import Blueprint, request
 from libs import stats
@@ -18,11 +19,15 @@ def start_tracking():
     if start_end is 'ErrIpNotFound':
         return stats.err['ErrIpNotFound'], 404
     # 请求检测照片
-    detect_url = os.environ.get("PY36_SERVER_URL", None) + '/detect?image=' + origin_image
+    detect_url = os.environ.get("PY36_SERVER_URL", None) + '/detect'
     try:
-        detect_res = rq.get(detect_url, headers=headers)
-        print detect_res.status_code
-        return stats.JsonResp(0, '检测成功').res()
+        detect_res = rq.post(
+            url=detect_url,
+            data=json.dumps({"image": origin_image, "epoch": epoch}),
+            headers=headers
+        )
+        # 返回检测结果
+        return stats.JsonResp(0, detect_res.json()['data']).res()
     except:
         return stats.err['ErrPy36ServerError'], 404
 

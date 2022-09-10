@@ -21,7 +21,7 @@ def nao_proxy(ip):
             camera_proxy=camera_proxy,
             speech_proxy=speech_proxy,
             battery_proxy=battery_proxy,
-            connect_proxy=connect_proxy
+            connect_proxy=connect_proxy,
         )
     except:
 

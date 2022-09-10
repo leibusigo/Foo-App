@@ -178,7 +178,7 @@ class YOLO(object):
                 batch_detections = batch_detections[0].cpu().numpy()
             except:
                 flag = False
-                return image, flag, top, bottom, left, right
+                return image, flag, [top], [bottom], [left], [right]
 
             # ---------------------------------------------------------#
             #   对预测框进行得分筛选
@@ -243,7 +243,6 @@ class YOLO(object):
             draw = ImageDraw.Draw(image)
             label_size = draw.textsize(label, font)
             label = label.encode('utf-8')
-            print(label, top, left, bottom, right)
 
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])
