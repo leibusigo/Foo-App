@@ -10,7 +10,7 @@ from libs.nao_proxy import nao_proxy, turn_head
 
 
 # 连接nao机器人
-def start(epoch):
+def start_tracking(epoch):
     ip = request.ip
     if ip is not 1:
         motion_proxy = nao_proxy(ip)['motion_proxy']
