@@ -4,7 +4,7 @@
 
 基于 Nao 机器人自动跟踪系统的前后端分离项目
 
-[![vOifyt.png](https://s1.ax1x.com/2022/09/10/vOifyt.png)](https://imgse.com/i/vOifyt)
+[![vOiOln.png](https://s1.ax1x.com/2022/09/10/vOiOln.png)](https://imgse.com/i/vOiOln)
 
 ## 技术栈
 
