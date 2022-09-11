@@ -2,8 +2,6 @@
 from flask import Blueprint, request
 from libs import stats
 from services import algorithm
-import re
-import db
 
 algorithm_api = Blueprint('algorithm_api', __name__)
 
@@ -38,24 +36,15 @@ def detect():
                     epoch
                 )
                 print(text_arr)
-                if len(text_arr) != 0:
-                    for text_num in range(len(text_arr)):
-                        regexp = re.compile(r'H')
-                        # 用正则方法匹配ocr检测到的字符
-                        if regexp.search(text_arr[text_num]):
-                            # 存入数据库
-                            db.coordinates.delete_many({})
-                            db.coordinates.insert({
-                                "top": str(top_arr[num]),
-                                "bottom": str(bottom_arr[num]),
-                                "left": str(left_arr[num]),
-                                "right": str(right_arr[num])
-                            })
+                # 正则匹配
+                reg_result = algorithm.reg_word(
+                    text_arr,
+                    top_arr[num],
+                    bottom_arr[num],
+                    left_arr[num],
+                    right_arr[num]
+                )
 
-                            return stats.JsonResp(0, 'ocr识别到特定目标物品').res()
-
-                    return stats.JsonResp(0, '物品上不存在特定标记').res()
-                else:
-                    return stats.JsonResp(0, '该物品无标记').res()
+                return stats.JsonResp(0, reg_result).res()
             else:
-                return stats.JsonResp(0, '没有物品在置顶范围内').res()
+                return stats.JsonResp(0, '没有物品在设置范围内').res()

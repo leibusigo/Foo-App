@@ -3,6 +3,8 @@ import os
 from PIL import Image
 from paddleocr import PaddleOCR
 import cv2
+import re
+import db
 import numpy as np
 from yolo import YOLO
 
@@ -53,6 +55,29 @@ def ocr_test(r_image, top, bottom, left, right, epoch):
         i += 1
 
     return text_arr
+
+
+# 文字匹配
+def reg_word(text_arr, top, bottom, left, right):
+    if len(text_arr) != 0:
+        for text_num in range(len(text_arr)):
+            regexp = re.compile(r'H')
+            # 用正则方法匹配ocr检测到的字符
+            if regexp.search(text_arr[text_num]):
+                # 存入数据库
+                db.coordinates.delete_many({})
+                db.coordinates.insert({
+                    "top": str(top),
+                    "bottom": str(bottom),
+                    "left": str(left),
+                    "right": str(right)
+                })
+
+                return 'ocr识别到特定目标物品'
+
+        return '物品上不存在特定标记'
+    else:
+        return '该物品无标记'
 
 
 # 双三次插值主程序
