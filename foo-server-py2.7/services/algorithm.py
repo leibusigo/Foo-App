@@ -33,18 +33,46 @@ def start_tracking(epoch):
 
         return 'success', base_url + '/origin.jpg'
     else:
-        return 'ErrIpNotFound'
+        return 'ErrIpNotFound', ''
+
+
+# 循环跟踪
+def loop_tracking(epoch):
+    ip = request.ip
+    motion_proxy = nao_proxy(ip)['motion_proxy']
+    camera_proxy = nao_proxy(ip)['camera_proxy']
+    track = db.track.find_one({}, {"_id": 0})
+    angle = track['angle']
+    current_angle = float(angle) + 0.25
+    # 角度大于1，未找到目标
+    if current_angle > 1:
+        return '未找到目标', ''
+    # 否则更新数据库
+    else:
+        db.track.delete_many({})
+        db.track.insert({"angle": str(current_angle)})
+    if ip is not 1:
+        turn_head(motion_proxy, current_angle)
+        camera_proxy.setActiveCamera(0)
+        frame_array = take_picture(camera_proxy)
+        base_url = os.environ.get("IMG_SAVE_PATH", None) + '/epoch' + str(epoch)
+        ImageProcess(base_url).mkdir()
+        cv2.imwrite(base_url + '/origin.jpg', frame_array)
+
+        return 'success', base_url + '/origin.jpg'
+    else:
+        return 'ErrIpNotFound', ''
 
 
 # 测距跟踪
 def range_and_tracking():
     ip = request.ip
+    track = db.track.find_one({}, {"_id": 0})
+    angle = track['angle']
     if ip is not 1:
         motion_proxy = nao_proxy(ip)['motion_proxy']
         speech_proxy = nao_proxy(ip)['speech_proxy']
         posture_proxy = nao_proxy(ip)['posture_proxy']
-        track = db.track.find_one({}, {"_id": 0})
-        angle = track['angle']
         forward_distance, side_distance = ranging()
         motion_proxy.moveTo(0, 0, float(angle))
         turn_head(motion_proxy, 0)

@@ -15,8 +15,8 @@ headers = {'content-type': 'application/json'}
 @algorithm_api.route("/startTracking")
 def start_tracking():
     epoch = request.args['epoch']
-    start_end, origin_image = algorithm.start_tracking(str(epoch))
-    if start_end is 'ErrIpNotFound':
+    start_result, origin_image = algorithm.start_tracking(str(epoch))
+    if start_result is 'ErrIpNotFound':
         return stats.err['ErrIpNotFound'], 404
     # 请求检测照片
     detect_url = os.environ.get("PY36_SERVER_URL", None) + '/detect'
@@ -32,10 +32,30 @@ def start_tracking():
         return stats.err['ErrPy36ServerError'], 404
 
 
-# 连接机器人接口
-# @algorithm_api.route("/loopTracking")
-# def loop_tracking():
-#     epoch = request.args['epoch']
+# 循环跟踪接口
+@algorithm_api.route("/loopTracking")
+def loop_tracking():
+    epoch = request.args['epoch']
+    if int(epoch) < 2:
+        return stats.err['ErrParametersNotAllowed'], 403
+    loop_result, origin_image = loop_tracking(epoch)
+    if loop_result is 'ErrIpNotFound':
+        return stats.err['ErrIpNotFound'], 404
+    elif loop_result is '未找到目标':
+        return stats.JsonResp(0, '未找到目标').res()
+    # 请求检测照片
+    detect_url = os.environ.get("PY36_SERVER_URL", None) + '/detect'
+    try:
+        detect_res = rq.post(
+            url=detect_url,
+            data=json.dumps({"image": origin_image, "epoch": epoch}),
+            headers=headers
+        )
+        # 返回检测结果
+        return stats.JsonResp(0, detect_res.json()['data']).res()
+    except:
+        return stats.err['ErrPy36ServerError'], 404
+
 
 # 测距跟踪接口
 @algorithm_api.route("/rangeTracking")
