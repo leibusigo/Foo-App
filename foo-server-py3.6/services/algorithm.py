@@ -156,3 +156,5 @@ def function(img, m, n):
                 empty_image[i, j] = np.array([blue, green, red], dtype=np.uint8)
 
     return empty_image
+
+

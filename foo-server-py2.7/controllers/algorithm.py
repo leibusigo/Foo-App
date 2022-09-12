@@ -11,7 +11,7 @@ algorithm_api = Blueprint('algorithm_api', __name__)
 headers = {'content-type': 'application/json'}
 
 
-# 连接机器人接口
+# 开始跟踪接口
 @algorithm_api.route("/startTracking")
 def start_tracking():
     epoch = request.args['epoch']
@@ -31,7 +31,23 @@ def start_tracking():
     except:
         return stats.err['ErrPy36ServerError'], 404
 
+
 # 连接机器人接口
 # @algorithm_api.route("/loopTracking")
 # def loop_tracking():
 #     epoch = request.args['epoch']
+
+# 测距跟踪接口
+@algorithm_api.route("/rangeTracking")
+def range_tracking():
+    data = algorithm.range_and_tracking()
+
+    return check(data)
+
+
+# 停止跟踪接口
+@algorithm_api.route("/stopTracking")
+def stop_tracking():
+    data = algorithm.stop_tracking()
+
+    return check(data)

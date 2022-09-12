@@ -6,3 +6,4 @@ db = client['foo-app']
 
 session = db.session
 track = db.track
+coordinates = db.coordinates

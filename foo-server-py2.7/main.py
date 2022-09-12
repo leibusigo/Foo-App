@@ -29,7 +29,7 @@ white_list = ['/api/py27/basic/connect']
 # 请求拦截
 @app.before_request
 def before():
-    ip = db.session.find_one()
+    ip = db.session.find_one({}, {"_id": 0})
     request.ip = 1
     if ip is not None:
         request.ip = ip['ip']
