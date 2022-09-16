@@ -1,0 +1,16 @@
+.main {
+  height: calc(100vh - 40px - 48px);
+  width: 100vw;
+  padding: 20px;
+}
+
+.ai_title {
+  display: flex;
+  align-items: center;
+  color: var(--primary-color--);
+  font-size: 0.36rem;
+  padding-bottom: 0.4rem;
+}
+
+.modal {
+}

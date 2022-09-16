@@ -7,6 +7,7 @@ import {
   Toast,
   Image,
   Selector,
+  ImageViewer,
 } from 'antd-mobile'
 import { SwiperRef } from 'antd-mobile/es/components/swiper'
 import {
@@ -33,20 +34,28 @@ export default function Home() {
   const [cameraId, setCameraId] = useState<string[]>(['0'])
   const { imageVisible, setImageVisible } = useContext(context)
   // 控制加载modal显示
-  const [loadingVisible, setModalVisible] = useState(false)
+  const [loadingVisible, setLodingVisible] = useState(false)
   // 控制加载按钮显示
   const [buttonVisible, setButtonVisible] = useState(true)
   // 控制设置输入框显示隐藏
   const [inputVisible, setInputVisible] = useState(false)
+  // 控制图片查看器
+  const [viewerVisible, setViewerVisible] = useState(false)
   const { basicLoaded, speak, wake, stop, walk, camera } = useBasic()
   const { debounce } = useDebounce()
+
+  useEffect(() => {
+    if (basicLoaded) {
+      setLodingVisible(false)
+    }
+  }, [basicLoaded])
 
   // 提交说话
   const submitSpeak = useCallback(() => {
     debounce(async () => {
       setButtonVisible(false)
       speak(speakValue)
-      setModalVisible(true)
+      setLodingVisible(true)
       setSpeakValue('')
     }, 1000)
   }, [debounce, speak, speakValue])
@@ -56,7 +65,7 @@ export default function Home() {
     (angle: string) => {
       debounce(async () => {
         setButtonVisible(true)
-        setModalVisible(true)
+        setLodingVisible(true)
         await wake()
         await walk(walkValue, angle)
       }, 1000)
@@ -160,12 +169,6 @@ export default function Home() {
     [imageVisible]
   )
 
-  useEffect(() => {
-    if (basicLoaded) {
-      setModalVisible(false)
-    }
-  }, [basicLoaded])
-
   return (
     <div>
       <LoadingModal
@@ -174,8 +177,15 @@ export default function Home() {
         onStop={() => {
           debounce(() => {
             stop()
-            setModalVisible(false)
+            setLodingVisible(false)
           }, 1000)
+        }}
+      />
+      <ImageViewer
+        image={require('../../../assets' + imgUrl)}
+        visible={viewerVisible}
+        onClose={() => {
+          setViewerVisible(false)
         }}
       />
       <Tabs
@@ -211,7 +221,7 @@ export default function Home() {
                   debounce(() => {
                     setButtonVisible(false)
                     wake()
-                    setModalVisible(true)
+                    setLodingVisible(true)
                   }, 1000)
                 }}
                 block
@@ -226,7 +236,7 @@ export default function Home() {
                   debounce(() => {
                     setButtonVisible(false)
                     stop()
-                    setModalVisible(true)
+                    setLodingVisible(true)
                   }, 1000)
                 }}
                 block
@@ -310,7 +320,13 @@ export default function Home() {
               <span>Nao拍摄控制</span>
             </Grid.Item>
             <Grid.Item className={styles.image_grid} span={6}>
-              <Image src={require('../../../assets' + imgUrl)} fit="fill" />
+              <Image
+                onClick={() => {
+                  setViewerVisible(true)
+                }}
+                src={require('../../../assets' + imgUrl)}
+                fit="fill"
+              />
             </Grid.Item>
             <Grid.Item span={6}>
               <Selector
@@ -327,7 +343,7 @@ export default function Home() {
               <Button
                 onClick={async () => {
                   setButtonVisible(false)
-                  setModalVisible(true)
+                  setLodingVisible(true)
                   await camera(cameraId[0])
                   setImageVisible(true)
                 }}

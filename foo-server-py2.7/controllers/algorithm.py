@@ -38,11 +38,11 @@ def loop_tracking():
     epoch = request.args['epoch']
     if int(epoch) < 2:
         return stats.err['ErrParametersNotAllowed'], 403
-    loop_result, origin_image = loop_tracking(epoch)
+    loop_result, origin_image = algorithm.loop_tracking(epoch)
     if loop_result is 'ErrIpNotFound':
         return stats.err['ErrIpNotFound'], 404
-    elif loop_result is '未找到目标':
-        return stats.JsonResp(0, '未找到目标').res()
+    elif loop_result == '未检测到目标':
+        return stats.JsonResp(0, '未检测到目标').res()
     # 请求检测照片
     detect_url = os.environ.get("PY36_SERVER_URL", None) + '/detect'
     try:
@@ -68,6 +68,7 @@ def range_tracking():
 # 停止跟踪接口
 @algorithm_api.route("/stopTracking")
 def stop_tracking():
-    data = algorithm.stop_tracking()
+    value = request.args['value']
+    data = algorithm.stop_tracking(value)
 
     return check(data)

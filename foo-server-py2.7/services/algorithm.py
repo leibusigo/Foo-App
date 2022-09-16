@@ -38,15 +38,17 @@ def start_tracking(epoch):
 
 # 循环跟踪
 def loop_tracking(epoch):
+    print epoch
     ip = request.ip
     motion_proxy = nao_proxy(ip)['motion_proxy']
     camera_proxy = nao_proxy(ip)['camera_proxy']
     track = db.track.find_one({}, {"_id": 0})
     angle = track['angle']
     current_angle = float(angle) + 0.25
+    print current_angle
     # 角度大于1，未找到目标
     if current_angle > 1:
-        return '未找到目标', ''
+        return '未检测到目标', ''
     # 否则更新数据库
     else:
         db.track.delete_many({})
@@ -87,12 +89,12 @@ def range_and_tracking():
 
 
 # 停止跟踪
-def stop_tracking():
+def stop_tracking(value):
     ip = request.ip
     if ip is not 1:
         speech_proxy = nao_proxy(ip)['speech_proxy']
         motion_proxy = nao_proxy(ip)['motion_proxy']
-        speech_proxy.say("停止跟踪")
+        speech_proxy.say(value.encode('utf8'))
         motion_proxy.rest()
 
         return 'success'
