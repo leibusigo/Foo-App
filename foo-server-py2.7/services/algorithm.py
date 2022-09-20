@@ -38,7 +38,6 @@ def start_tracking(epoch):
 
 # 循环跟踪
 def loop_tracking(epoch):
-    print epoch
     ip = request.ip
     motion_proxy = nao_proxy(ip)['motion_proxy']
     camera_proxy = nao_proxy(ip)['camera_proxy']

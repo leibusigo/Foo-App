@@ -18,7 +18,7 @@ else:
 load_dotenv(os.path.join(root_dir, '.env'))
 
 
-# # 请求拦截
+# 请求拦截
 # @app.before_request
 # def before():
 #     print(1)

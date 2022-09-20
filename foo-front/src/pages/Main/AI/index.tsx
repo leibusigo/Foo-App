@@ -11,9 +11,9 @@ export default function AI() {
   const [trackModalVisible, setTrackModalVisible] = useState(false)
   // 控制加载按钮显示
   // const [loadingVisible, setLodingVisible] = useState(false)
-  const { algorithmStatus, algorithmLoaded, startTracking } = useAlgorithm()
+  const { algorithmStatus, algorithmLoaded, epoch, startTracking } =
+    useAlgorithm()
   const { stop } = useBasic()
-  const [epoch] = useState(1)
   const { debounce } = useDebounce()
 
   // useEffect(() => {
@@ -22,7 +22,18 @@ export default function AI() {
   //   }
   // }, [algorithmLoaded])
 
-  const imgUrl = useMemo(() => `/img/epoch${epoch}/origin.jpg`, [epoch])
+  // const imgUrl = useMemo(() => {
+  //   if (algorithmStatus === '没有目标类别物品') {
+  //     return `/img/epoch${epoch}/origin.jpg`
+  //   } else if (algorithmStatus === '') {
+  //     return '/img/default.png'
+  //   } else {
+  //     return `/img/epoch${epoch}/cut.jpg`
+  //   }
+  // }, [algorithmStatus, epoch])
+  const imgUrl = useMemo(() => {
+    return '/img/default.png'
+  }, [])
 
   const trackingProcess = useMemo(() => {
     return (
@@ -53,7 +64,7 @@ export default function AI() {
       <Button
         onClick={() => {
           setTrackModalVisible(true)
-          startTracking(epoch)
+          startTracking(1)
         }}
         block
         color="primary"

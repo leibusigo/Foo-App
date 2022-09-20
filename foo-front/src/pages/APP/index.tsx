@@ -16,7 +16,12 @@ export default function App() {
 
   return (
     <StoreProvider
-      value={{ robotInfo, setRobotInfo, imageVisible, setImageVisible }}
+      value={{
+        robotInfo,
+        setRobotInfo,
+        imageVisible,
+        setImageVisible,
+      }}
     >
       {element}
     </StoreProvider>

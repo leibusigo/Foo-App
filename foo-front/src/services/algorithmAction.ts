@@ -12,7 +12,7 @@ export async function startTracking(epoch: string) {
 
 // 循环跟踪接口
 export async function loopTracking(epoch: string) {
-  const { data } = await request.post<ApiResp>(
+  const { data } = await request.get<ApiResp>(
     `/py27/algorithm/loopTracking?${new URLSearchParams('epoch=' + epoch)}`
   )
 
