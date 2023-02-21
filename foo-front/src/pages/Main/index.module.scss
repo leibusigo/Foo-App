@@ -11,6 +11,7 @@
 
   .nav {
     border-bottom: 0.02rem solid var(--primary-border-color--);
+    z-index: 9999;
 
     .nav_left {
       @include flex_center();

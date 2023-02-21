@@ -72,7 +72,15 @@
 }
 
 .image_grid {
-  padding: 0 0.4rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.4rem;
+
+  .shot_img {
+    width: 320px;
+    height: 240px;
+  }
 }
 
 .single_seletor {

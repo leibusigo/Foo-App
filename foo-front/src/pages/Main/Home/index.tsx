@@ -321,6 +321,7 @@ export default function Home() {
             </Grid.Item>
             <Grid.Item className={styles.image_grid} span={6}>
               <Image
+                className={styles.shot_img}
                 onClick={() => {
                   setViewerVisible(true)
                 }}
