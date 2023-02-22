@@ -38,7 +38,7 @@ export default function AI() {
   const trackingProcess = useMemo(() => {
     return (
       <AlgorithmModal visible={trackModalVisible}>
-        <h1 className={styles.modal_title}>Nao机器人自动跟踪算法</h1>
+        <h1 className={styles.modal_title}>Nao特定目标跟踪算法</h1>
         <div className={styles.modal}>
           <div className={styles.img_container}>
             <Image
@@ -68,7 +68,7 @@ export default function AI() {
   return (
     <div className={styles.main}>
       {trackingProcess}
-      <div className={styles.ai_title}>Nao自动跟踪算法</div>
+      <div className={styles.ai_title}>Nao特定目标跟踪算法</div>
       <Button
         onClick={() => {
           setTrackModalVisible(true)
