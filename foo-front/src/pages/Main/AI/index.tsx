@@ -3,37 +3,37 @@ import { useEffect, useMemo, useState } from 'react'
 
 import useAlgorithm from '../../../hooks/useAlgorithm'
 import styles from './index.module.scss'
-import useBasic from '../../../hooks/useBasic'
 import useDebounce from '../../../hooks/useDebounce'
 import AlgorithmModal from '../../../components/AlgorithmModal'
 
 export default function AI() {
   const [trackModalVisible, setTrackModalVisible] = useState(false)
-  // 控制加载按钮显示
-  // const [loadingVisible, setLodingVisible] = useState(false)
-  const { algorithmStatus, algorithmLoaded, epoch, startTracking } =
-    useAlgorithm()
-  const { stop } = useBasic()
+  const {
+    algorithmStatus,
+    setAlgorithmStatus,
+    epoch,
+    startTracking,
+    stopTracking,
+  } = useAlgorithm()
   const { debounce } = useDebounce()
 
-  // useEffect(() => {
-  //   if (algorithmLoaded) {
-  //     setLodingVisible(false)
-  //   }
-  // }, [algorithmLoaded])
+  useEffect(() => {
+    if (algorithmStatus === '未检测到目标') {
+      setTimeout(() => {
+        setTrackModalVisible(false)
+      }, 3000)
+    }
+  }, [algorithmStatus])
 
-  // const imgUrl = useMemo(() => {
-  //   if (algorithmStatus === '没有目标类别物品') {
-  //     return `/img/epoch${epoch}/origin.jpg`
-  //   } else if (algorithmStatus === '') {
-  //     return '/img/default.png'
-  //   } else {
-  //     return `/img/epoch${epoch}/cut.jpg`
-  //   }
-  // }, [algorithmStatus, epoch])
   const imgUrl = useMemo(() => {
-    return '/img/default.png'
-  }, [])
+    if (algorithmStatus === '没有目标类别物品') {
+      return `/img/epoch${epoch}/origin.jpg`
+    } else if (algorithmStatus === '算法运行中') {
+      return '/img/default.png'
+    } else {
+      return `/img/epoch${epoch}/cut.jpg`
+    }
+  }, [algorithmStatus, epoch])
 
   const trackingProcess = useMemo(() => {
     return (
@@ -47,12 +47,31 @@ export default function AI() {
               fit="contain"
             />
           </div>
-          <h3>{algorithmStatus}</h3>
+          <h2 className={styles.algorithm_status}>
+            当前算法状态：
+            <br />
+            <br />
+            {algorithmStatus}
+          </h2>
+          {algorithmStatus === 'ocr识别到特定目标物品' && (
+            <Button
+              className={styles.continue}
+              onClick={() => {
+                debounce(() => {
+                  startTracking(1, false)
+                }, 1000)
+                setAlgorithmStatus('算法运行中')
+              }}
+              color="success"
+            >
+              继续检测
+            </Button>
+          )}
           <Button
             className={styles.stop}
             onClick={() => {
               debounce(() => {
-                stop()
+                stopTracking('完成跟踪')
                 setTrackModalVisible(false)
               }, 1000)
             }}
@@ -63,7 +82,15 @@ export default function AI() {
         </div>
       </AlgorithmModal>
     )
-  }, [algorithmStatus, debounce, imgUrl, stop, trackModalVisible])
+  }, [
+    algorithmStatus,
+    debounce,
+    imgUrl,
+    setAlgorithmStatus,
+    startTracking,
+    stopTracking,
+    trackModalVisible,
+  ])
 
   return (
     <div className={styles.main}>
@@ -73,6 +100,7 @@ export default function AI() {
         onClick={() => {
           setTrackModalVisible(true)
           startTracking(1)
+          setAlgorithmStatus('算法运行中')
         }}
         block
         color="primary"

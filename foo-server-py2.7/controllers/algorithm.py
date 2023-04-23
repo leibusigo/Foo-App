@@ -14,8 +14,8 @@ headers = {'content-type': 'application/json'}
 # 开始跟踪接口
 @algorithm_api.route("/startTracking")
 def start_tracking():
-    epoch = request.args['epoch']
-    start_result, origin_image = algorithm.start_tracking(str(epoch))
+    is_first = request.args['isFirst']
+    start_result, origin_image = algorithm.start_tracking(is_first)
     if start_result is 'ErrIpNotFound':
         return stats.err['ErrIpNotFound'], 404
     # 请求检测照片
@@ -23,7 +23,7 @@ def start_tracking():
     try:
         detect_res = rq.post(
             url=detect_url,
-            data=json.dumps({"image": origin_image, "epoch": epoch}),
+            data=json.dumps({"image": origin_image, "epoch": '1'}),
             headers=headers
         )
         # 返回检测结果

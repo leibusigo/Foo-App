@@ -2,9 +2,9 @@ import request from '../libs/request'
 import { ApiResp } from '../types/models'
 
 // 开始跟踪接口
-export async function startTracking(epoch: string) {
+export async function startTracking(isFirst:boolean) {
   const { data } = await request.get<ApiResp>(
-    `/py27/algorithm/startTracking?${new URLSearchParams('epoch=' + epoch)}`
+    `/py27/algorithm/startTracking?${new URLSearchParams('isFirst=' + isFirst)}`
   )
 
   return data

@@ -6,10 +6,8 @@ export default function useAlgorithm() {
   const [algorithmError, setAlgorithmError] = useState('')
   // 加载
   const [algorithmLoaded, setAlgorithmLoaded] = useState(false)
-  const [algorithmStatus, setAlgorithmStatus] = useState('')
+  const [algorithmStatus, setAlgorithmStatus] = useState('算法运行中')
   const [epoch, setEpoch] = useState(1)
-
-  // const [turn, setTurn] = useState(1)
 
   const loopTracking = useCallback(async (epoch: number) => {
     try {
@@ -55,25 +53,27 @@ export default function useAlgorithm() {
 
   // 开始跟踪
   const startTracking = useCallback(
-    async (epoch: number) => {
+    async (epoch: number, isFirst: boolean = true) => {
       try {
         setAlgorithmError('')
         setAlgorithmLoaded(false)
-        const { code, data } = await algorithmServices.startTracking(
-          String(epoch)
-        )
+        const { code, data } = await algorithmServices.startTracking(isFirst)
         if (code === 0) {
           setAlgorithmStatus(data)
           if (data !== 'ocr识别到特定目标物品') {
-            while (1) {
-              const res = await loopTracking(epoch + 1)
-              setEpoch(epoch + 1)
-              if (res === 'ocr识别到特定目标物品') {
-                await rangeTracking()
-                break
-              } else if (res === '未检测到目标') {
-                await stopTracking(res)
-                break
+            if (!isFirst) {
+              await startTracking(1)
+            } else {
+              while (1) {
+                const res = await loopTracking(epoch + 1)
+                setEpoch(epoch + 1)
+                if (res === 'ocr识别到特定目标物品') {
+                  await rangeTracking()
+                  break
+                } else if (res === '未检测到目标') {
+                  await stopTracking(res)
+                  break
+                }
               }
             }
           } else {
@@ -95,6 +95,8 @@ export default function useAlgorithm() {
     algorithmError,
     algorithmLoaded,
     algorithmStatus,
+    setAlgorithmStatus,
     startTracking,
+    stopTracking
   }
 }
