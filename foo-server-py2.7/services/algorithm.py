@@ -79,7 +79,8 @@ def range_and_tracking():
         motion_proxy.moveTo(0, 0, float(angle))
         turn_head(motion_proxy, 0)
         speech_proxy.say("开始跟踪")
-        motion_proxy.moveTo((forward_distance - 1.09) / 1.25, 0, 0)
+        # motion_proxy.moveTo((forward_distance - 1.09) / 1.25, 0, 0)
+        motion_proxy.moveTo(0.8, 0, 0)
         turn_head(motion_proxy, 0)
         posture_proxy.goToPosture("StandInit", 0.5)
 

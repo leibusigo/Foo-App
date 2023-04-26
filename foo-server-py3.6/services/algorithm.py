@@ -80,7 +80,7 @@ def reg_word(text_arr, top, bottom, left, right):
         return '该物品无标记'
 
 
-# 双三次插值主程序
+# 超分重建主程序
 def super_resolution(crop_img, top, bottom, left, right, base_url):
     zoom = function(crop_img, (bottom - top) * 5, (right - left) * 5)
     cv2.imwrite(base_url + "/resolution_result.jpg", zoom)
@@ -88,7 +88,7 @@ def super_resolution(crop_img, top, bottom, left, right, base_url):
     return zoom
 
 
-# 双三次插值内部执行函数
+# 超分重建内部执行函数
 def S(x):
     x = np.abs(x)
     if 0 <= x < 1:
@@ -99,7 +99,7 @@ def S(x):
         return 0
 
 
-# 双三次插值
+# 超分重建
 def function(img, m, n):
     height, width, channels = img.shape
     empty_image = np.zeros((m, n, channels), np.uint8)
